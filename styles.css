@@ -61,6 +61,8 @@ body {
     position: absolute;
     width:  100%;
     bottom: 40px;
+    text-align: center;
+    right: 111px;
 }
 
 .footer span {
