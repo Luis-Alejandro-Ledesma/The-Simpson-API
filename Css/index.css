@@ -111,3 +111,32 @@ html, body {
   color: #005BAC; 
   font-size: 1rem;
 }
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pagination button {
+  background: #FFCC00;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  color: #005BAC;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.pagination button:hover {
+  background: #F4B400;
+}
+
+.pagination button.active {
+  background: #005BAC;
+  color: white;
+}

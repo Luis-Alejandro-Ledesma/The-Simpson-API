@@ -28,11 +28,32 @@ function loadCharacters(page = 1) {
       personajes.forEach(character => {
         container.innerHTML += renderCharacterCard(character);
       });
+  renderPagination(page, data.totalPages || 10);
+
     })
     .catch(error => {
       console.error("Error al cargar personajes:", error);
       container.innerHTML = "<p>Error al cargar los personajes.</p>";
     });
+}
+
+function renderPagination(current, total) {
+  pagination.innerHTML = "";
+  if (current > 1) {
+    pagination.innerHTML += `<button onclick="loadCharacters(${current - 1})">&laquo;</button>`;
+  }
+  for (let i = 1; i <= total; i++) {
+    if (i === current) {
+      pagination.innerHTML += `<button class="active">${i}</button>`;
+    } else if (i === 1 || i === total || (i >= current - 2 && i <= current + 2)) {
+      pagination.innerHTML += `<button onclick="loadCharacters(${i})">${i}</button>`;
+    } else if (i === current - 3 || i === current + 3) {
+      pagination.innerHTML += `<span>...</span>`;
+    }
+  }
+  if (current < total) {
+    pagination.innerHTML += `<button onclick="loadCharacters(${current + 1})">&raquo;</button>`;
+  }
 }
 
 loadCharacters();
