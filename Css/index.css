@@ -7,8 +7,11 @@
     font-family: 'Simpsonfont', sans-serif;
 }
 
-body {
-    background-color: rgb(254, 212, 32);
+html, body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(254, 212, 32);
 }
 
 .header {
@@ -47,7 +50,8 @@ body {
     text-align: center;
     width: 100%;
     height:100px ;
-    background-color: yellow rgb(254, 212, 32);
+    background-color: yellow rgb(254, 212, 32);
+    margin: 0px 0px 200px 0px;
 }
 
 .hero img {
@@ -58,13 +62,52 @@ body {
 }
 
 .footer {
-    position: absolute;
-    width:  100%;
-    bottom: 40px;
+    color: black;
     text-align: center;
+    padding: 10px;
     right: 111px;
 }
 
-.footer span {
-    position: absolute;
+#characters-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  justify-items: center;
+  gap: 40px;
+  margin: 65px;
+}
+
+.character-card {
+  background: #FFCC00;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+  width: 200px;
+  height: 350px; 
+  text-align: center;
+  padding: 20px;
+  transition: transform 0.2s;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.character-card:hover {
+  transform: scale(1.05);
+}
+
+.character-img {
+  max-height: 200px;
+  object-fit: contain;
+}
+
+.character-name {
+  color: #005BAC;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.character-gender,
+.character-status {
+  color: #005BAC; 
+  font-size: 1rem;
 }
