@@ -1,3 +1,4 @@
+const container = document.getElementById("character-detail");
 const loading = document.getElementById("loading");
 
 function loadCharacter(nombre) {
@@ -16,6 +17,28 @@ function loadCharacter(nombre) {
       loading.style.display = "none";
     });
 }
+
+function renderCharacterDetail(character) {
+  if (!character) {
+    return "<p>Personaje no encontrado.</p>";
+  }
+  return `
+    <div class="character-card">
+      <button class="close-button" onclick="window.history.back()">✕</button>
+      <img src="${character.Imagen}" alt="${character.Nombre}" class="character-img">
+      <div class="character-info">
+        <div class="character-meta">
+          <div class="character-name"><strong>Nombre</strong> | ${character.Nombre}</div>
+          <div class="character-gender"><strong>Género</strong> | ${character.Genero || "No disponible"}</div>
+          <div class="character-status"><strong>Estado</strong> | ${character.Estado || "No disponible"}</div>
+          <div class="character-occupation"><strong>Ocupación</strong> | ${character.Ocupacion || "No disponible"}</div>
+        </div>
+        <p class="character-history">${character.Historia || "No hay historia disponible."}</p>
+      </div>
+    </div>
+  `;
+}
+
 const urlParams = new URLSearchParams(window.location.search);
 const nombre = urlParams.get("nombre");
 if (nombre) {
