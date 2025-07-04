@@ -140,3 +140,71 @@ html, body {
   background: #005BAC;
   color: white;
 }
+
+.buscar {
+    position: fixed;
+    margin: 18px;
+    right: 6px;
+}
+
+.buscar input {
+    border-radius: 25px;
+    margin: 1px;
+    padding: 7px 16px;
+    border-color: white;
+    box-shadow: none;
+    border: 1px solid #ccc;
+}
+
+.buscar input:focus {
+  outline-color: #fff;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.buscar button:hover {
+  background-color: #ffffff;
+  color: #005BAC;
+}
+
+.buscar button {
+    border-radius: 25px;
+    padding: 7px 16px;
+    border-color: white;
+    color: rgb(95, 95, 95);
+    border: 1px solid #ccc;
+  }
+
+#autocompleteList {
+  list-style: none;
+  padding: 0;
+  margin-top: 0;
+  max-height: 155px;
+  overflow-y: auto;
+  background-color: #fff;
+  position: absolute;
+  z-index: 1000;
+  width: 207px;
+  top: 34px;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+}
+
+#autocompleteList li {
+  padding: 10px;
+  cursor: pointer;
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#autocompleteList li:hover {
+  background-color: #f0f0f0;
+}
+
+#no_res {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  bottom: 65px;
+}
