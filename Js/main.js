@@ -57,3 +57,108 @@ function renderPagination(current, total) {
 }
 
 loadCharacters();
+
+//intento de buscador
+
+const inputBusqueda = document.getElementById("name-filter");
+const botonBuscar = document.getElementById("buscador");
+const autocompleteList = document.getElementById("autocompleteList");
+
+let todosLosPersonajes = [];
+
+loadCharacters();
+
+fetch("https://apisimpsons.fly.dev/api/personajes?limit=1000")
+  .then(res => res.json())
+  .then(data => {
+    todosLosPersonajes = data.docs;
+  });
+
+botonBuscar.addEventListener("click", buscarPersonaje);
+
+inputBusqueda.addEventListener("input", function () {
+  const query = this.value.toLowerCase().trim();
+  mostrarSugerencias(query);
+});
+
+inputBusqueda.addEventListener("click", function () {
+  const query = this.value.toLowerCase().trim();
+  mostrarSugerencias(query);
+});
+
+document.addEventListener("click", function (e) {
+  setTimeout(() => {
+    if (
+      !inputBusqueda.contains(e.target) &&
+      !autocompleteList.contains(e.target)
+    ) {
+      autocompleteList.innerHTML = "";
+    }
+  }, 100);
+});
+
+function mostrarSugerencias(query) {
+  autocompleteList.innerHTML = "";
+
+  let sugerencias = [];
+
+  if (query.length === 0) {
+    sugerencias = [...todosLosPersonajes]
+      .sort(() => Math.random() - 0)
+      .slice(0, 3);
+  } else {
+    sugerencias = todosLosPersonajes
+      .filter(p => p.Nombre.toLowerCase().startsWith(query))
+      .slice(0, 3);
+  }
+
+  // Mostrar sugerencias o mensaje de "sin coincidencias"
+  if (sugerencias.length === 0) {
+    const li = document.createElement("li");
+    li.textContent = "Sin coincidencias";
+    li.style.color = "#888"; // estilo opcional como un nombre gris
+    li.style.cursor = "default";
+    autocompleteList.appendChild(li);
+    return;
+  }
+
+  sugerencias.forEach(p => {
+    const li = document.createElement("li");
+    li.textContent = p.Nombre;
+    li.addEventListener("click", () => {
+      inputBusqueda.value = p.Nombre;
+      autocompleteList.innerHTML = "";
+      buscarPersonaje();
+    });
+    autocompleteList.appendChild(li);
+  });
+}
+
+function buscarPersonaje() {
+  const nombre = inputBusqueda.value.toLowerCase().trim();
+  container.innerHTML = "";
+  autocompleteList.innerHTML = "";
+  no_res.innerHTML = "";
+
+  if (nombre === "") {
+    no_res.innerHTML = "<p>Por favor ingresa un nombre para buscar.</p>";
+    pagination.innerHTML = "";
+    return;
+  }
+
+  const resultados = todosLosPersonajes
+    .filter(p => p.Nombre.toLowerCase().startsWith(nombre))
+    .sort((a, b) => a.Nombre.localeCompare(b.Nombre));
+
+  if (resultados.length === 0) {
+    no_res.innerHTML = "<p>No se encontró ningún personaje. :(</p>";
+    pagination.innerHTML = "";
+    return;
+  }
+
+  resultados.forEach(personaje => {
+    container.innerHTML += renderCharacterCard(personaje);
+  });
+
+  pagination.innerHTML = "";
+}
