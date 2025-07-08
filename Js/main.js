@@ -1,7 +1,18 @@
 const container = document.getElementById("characters-container");
+const pagination = document.getElementById("pagination");
 let currentPage = 1;
 const limit = 50;
+let allCharacters = [];
 
+// Toggle del menú de filtros
+const filterToggle = document.getElementById("filter-toggle");
+const filterOptions = document.getElementById("filter-options");
+
+filterToggle.addEventListener("click", () => {
+  filterOptions.classList.toggle("hidden");
+});
+
+// Función para renderizar tarjeta
 function renderCharacterCard(character) {
   return `
     <div class="character-card" onclick="verDetalles('${character.Nombre}')">
@@ -13,30 +24,36 @@ function renderCharacterCard(character) {
   `;
 }
 
+// Redirigir a vista individual
 function verDetalles(nombre) {
   const nombreParam = encodeURIComponent(nombre);
   window.location.href = `character.html?nombre=${nombreParam}`;
 }
 
+// Cargar personajes
 function loadCharacters(page = 1) {
   const API_URL = `https://apisimpsons.fly.dev/api/personajes?limit=${limit}&page=${page}`;
   fetch(API_URL)
-    .then(response => response.json())
+    .then(res => res.json())
     .then(data => {
-      const personajes = data.docs;
-      container.innerHTML = "";
-      personajes.forEach(character => {
-        container.innerHTML += renderCharacterCard(character);
-      });
-  renderPagination(page, data.totalPages || 10);
-
+      allCharacters = data.docs;
+      displayCharacters(allCharacters);
+      renderPagination(page, data.totalPages || 10);
     })
-    .catch(error => {
-      console.error("Error al cargar personajes:", error);
+    .catch(err => {
+      console.error("Error al cargar personajes:", err);
       container.innerHTML = "<p>Error al cargar los personajes.</p>";
     });
 }
 
+function displayCharacters(list) {
+  container.innerHTML = "";
+  list.forEach(character => {
+    container.innerHTML += renderCharacterCard(character);
+  });
+}
+
+// Renderizar paginación
 function renderPagination(current, total) {
   pagination.innerHTML = "";
   if (current > 1) {
@@ -56,23 +73,27 @@ function renderPagination(current, total) {
   }
 }
 
-loadCharacters();
+// Aplicar filtros
+document.getElementById("applyFilters").addEventListener("click", () => {
+  const estado = document.getElementById("estado").value;
+  const ocupacion = document.getElementById("ocupacion").value.toLowerCase();
+  const genero = document.getElementById("genero").value;
 
-//intento de buscador
+  const filtered = allCharacters.filter(p => {
+    const matchEstado = estado ? p.Estado === estado : true;
+    const matchGenero = genero ? p.Genero === genero : true;
+    const matchOcupacion = ocupacion ? p.Ocupacion.toLowerCase().includes(ocupacion) : true;
+    return matchEstado && matchGenero && matchOcupacion;
+  });
 
+  displayCharacters(filtered);
+  pagination.innerHTML = ""; // quitar paginación en vista filtrada
+});
+
+// Buscador
 const inputBusqueda = document.getElementById("name-filter");
 const botonBuscar = document.getElementById("buscador");
 const autocompleteList = document.getElementById("autocompleteList");
-
-let todosLosPersonajes = [];
-
-loadCharacters();
-
-fetch("https://apisimpsons.fly.dev/api/personajes?limit=1000")
-  .then(res => res.json())
-  .then(data => {
-    todosLosPersonajes = data.docs;
-  });
 
 botonBuscar.addEventListener("click", buscarPersonaje);
 
@@ -88,10 +109,7 @@ inputBusqueda.addEventListener("click", function () {
 
 document.addEventListener("click", function (e) {
   setTimeout(() => {
-    if (
-      !inputBusqueda.contains(e.target) &&
-      !autocompleteList.contains(e.target)
-    ) {
+    if (!inputBusqueda.contains(e.target) && !autocompleteList.contains(e.target)) {
       autocompleteList.innerHTML = "";
     }
   }, 100);
@@ -101,22 +119,18 @@ function mostrarSugerencias(query) {
   autocompleteList.innerHTML = "";
 
   let sugerencias = [];
-
   if (query.length === 0) {
-    sugerencias = [...todosLosPersonajes]
-      .sort(() => Math.random() - 0)
-      .slice(0, 3);
+    sugerencias = [...allCharacters].sort(() => Math.random() - 0.5).slice(0, 3);
   } else {
-    sugerencias = todosLosPersonajes
+    sugerencias = allCharacters
       .filter(p => p.Nombre.toLowerCase().startsWith(query))
       .slice(0, 3);
   }
 
-  // Mostrar sugerencias o mensaje de "sin coincidencias"
   if (sugerencias.length === 0) {
     const li = document.createElement("li");
     li.textContent = "Sin coincidencias";
-    li.style.color = "#888"; // estilo opcional como un nombre gris
+    li.style.color = "#888";
     li.style.cursor = "default";
     autocompleteList.appendChild(li);
     return;
@@ -138,27 +152,24 @@ function buscarPersonaje() {
   const nombre = inputBusqueda.value.toLowerCase().trim();
   container.innerHTML = "";
   autocompleteList.innerHTML = "";
-  no_res.innerHTML = "";
 
   if (nombre === "") {
-    no_res.innerHTML = "<p>Por favor ingresa un nombre para buscar.</p>";
     pagination.innerHTML = "";
     return;
   }
 
-  const resultados = todosLosPersonajes
-    .filter(p => p.Nombre.toLowerCase().startsWith(nombre))
-    .sort((a, b) => a.Nombre.localeCompare(b.Nombre));
+  const resultados = allCharacters.filter(p =>
+    p.Nombre.toLowerCase().startsWith(nombre)
+  );
 
   if (resultados.length === 0) {
-    no_res.innerHTML = "<p>No se encontró ningún personaje. :(</p>";
+    container.innerHTML = "<p>No se encontró ningún personaje.</p>";
     pagination.innerHTML = "";
     return;
   }
 
-  resultados.forEach(personaje => {
-    container.innerHTML += renderCharacterCard(personaje);
-  });
-
+  displayCharacters(resultados);
   pagination.innerHTML = "";
 }
+
+loadCharacters();
