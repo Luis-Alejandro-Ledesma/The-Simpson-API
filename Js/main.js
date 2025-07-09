@@ -10,7 +10,6 @@ const limit = 50;
 let allCharacters = [];
 let filteredCharacters = [];
 
-// Función para renderizar tarjeta de personaje
 function renderCharacterCard(character) {
   return `
     <div class="character-card" onclick="verDetalles('${character.Nombre}')">
@@ -22,13 +21,11 @@ function renderCharacterCard(character) {
   `;
 }
 
-// Redirigir a vista individual
 function verDetalles(nombre) {
   const nombreParam = encodeURIComponent(nombre);
   window.location.href = `character.html?nombre=${nombreParam}`;
 }
 
-// Cargar TODOS los personajes de todas las páginas
 async function loadAllCharacters() {
   let page = 1;
   let hasMore = true;
@@ -47,11 +44,10 @@ async function loadAllCharacters() {
     }
   }
 
-  filteredCharacters = allCharacters; // inicializa filtrados con todos
+  filteredCharacters = allCharacters;
   displayCharacters(filteredCharacters, 1);
 }
 
-// Muestra personajes paginados
 function displayCharacters(array, page) {
   currentPage = page;
   container.innerHTML = "";
@@ -67,7 +63,6 @@ function displayCharacters(array, page) {
   renderPagination(array.length);
 }
 
-// Renderiza paginación en base al array filtrado
 function renderPagination(totalItems) {
   const totalPages = Math.ceil(totalItems / limit);
   pagination.innerHTML = "";
@@ -93,7 +88,6 @@ function renderPagination(totalItems) {
   }
 }
 
-// FILTROS
 function aplicarFiltros() {
   const estado = document.getElementById("estado").value;
   const ocupacion = document.getElementById("ocupacion").value.toLowerCase().trim();
@@ -117,7 +111,6 @@ function aplicarFiltros() {
   }
 }
 
-// Autocompletado buscador
 function mostrarSugerencias(query) {
   autocompleteList.innerHTML = "";
   let sugerencias = [];
@@ -177,27 +170,20 @@ function buscarPersonaje() {
   displayCharacters(filteredCharacters, 1);
 }
 
-// LISTENERS
-
-// Botón aplicar filtros
 document.getElementById("applyFilters").addEventListener("click", aplicarFiltros);
 
-// Botón toggle filtros
 document.getElementById("filter-toggle").addEventListener("click", () => {
   const options = document.getElementById("filter-options");
   options.classList.toggle("hidden");
 });
 
-// Buscador input
 inputBusqueda.addEventListener("input", function () {
   const query = this.value.toLowerCase().trim();
   mostrarSugerencias(query);
 });
 
-// Botón buscar
 botonBuscar.addEventListener("click", buscarPersonaje);
 
-// Click fuera de sugerencias
 document.addEventListener("click", function (e) {
   setTimeout(() => {
     if (!inputBusqueda.contains(e.target) && !autocompleteList.contains(e.target)) {
@@ -206,5 +192,4 @@ document.addEventListener("click", function (e) {
   }, 100);
 });
 
-// Inicializa app
 loadAllCharacters();
