@@ -1,18 +1,16 @@
 const container = document.getElementById("characters-container");
 const pagination = document.getElementById("pagination");
+const no_res = document.getElementById("no_res");
+const inputBusqueda = document.getElementById("name-filter");
+const botonBuscar = document.getElementById("buscador");
+const autocompleteList = document.getElementById("autocompleteList");
+
 let currentPage = 1;
 const limit = 50;
 let allCharacters = [];
+let filteredCharacters = [];
 
-// Toggle del menú de filtros
-const filterToggle = document.getElementById("filter-toggle");
-const filterOptions = document.getElementById("filter-options");
-
-filterToggle.addEventListener("click", () => {
-  filterOptions.classList.toggle("hidden");
-});
-
-// Función para renderizar tarjeta
+// Función para renderizar tarjeta de personaje
 function renderCharacterCard(character) {
   return `
     <div class="character-card" onclick="verDetalles('${character.Nombre}')">
@@ -30,95 +28,100 @@ function verDetalles(nombre) {
   window.location.href = `character.html?nombre=${nombreParam}`;
 }
 
-// Cargar personajes
-function loadCharacters(page = 1) {
-  const API_URL = `https://apisimpsons.fly.dev/api/personajes?limit=${limit}&page=${page}`;
-  fetch(API_URL)
-    .then(res => res.json())
-    .then(data => {
-      allCharacters = data.docs;
-      displayCharacters(allCharacters);
-      renderPagination(page, data.totalPages || 10);
-    })
-    .catch(err => {
-      console.error("Error al cargar personajes:", err);
-      container.innerHTML = "<p>Error al cargar los personajes.</p>";
-    });
+// Cargar TODOS los personajes de todas las páginas
+async function loadAllCharacters() {
+  let page = 1;
+  let hasMore = true;
+  allCharacters = [];
+
+  while (hasMore) {
+    const API_URL = `https://apisimpsons.fly.dev/api/personajes?limit=50&page=${page}`;
+    const res = await fetch(API_URL);
+    const data = await res.json();
+    allCharacters = allCharacters.concat(data.docs);
+
+    if (data.docs.length < 50) {
+      hasMore = false;
+    } else {
+      page++;
+    }
+  }
+
+  filteredCharacters = allCharacters; // inicializa filtrados con todos
+  displayCharacters(filteredCharacters, 1);
 }
 
-function displayCharacters(list) {
+// Muestra personajes paginados
+function displayCharacters(array, page) {
+  currentPage = page;
   container.innerHTML = "";
-  list.forEach(character => {
+
+  const start = (page - 1) * limit;
+  const end = start + limit;
+  const paginated = array.slice(start, end);
+
+  paginated.forEach(character => {
     container.innerHTML += renderCharacterCard(character);
   });
+
+  renderPagination(array.length);
 }
 
-// Renderizar paginación
-function renderPagination(current, total) {
+// Renderiza paginación en base al array filtrado
+function renderPagination(totalItems) {
+  const totalPages = Math.ceil(totalItems / limit);
   pagination.innerHTML = "";
-  if (current > 1) {
-    pagination.innerHTML += `<button onclick="loadCharacters(${current - 1})">&laquo;</button>`;
+
+  if (totalPages <= 1) return;
+
+  if (currentPage > 1) {
+    pagination.innerHTML += `<button onclick="displayCharacters(filteredCharacters, ${currentPage - 1})">&laquo;</button>`;
   }
-  for (let i = 1; i <= total; i++) {
-    if (i === current) {
+
+  for (let i = 1; i <= totalPages; i++) {
+    if (i === currentPage) {
       pagination.innerHTML += `<button class="active">${i}</button>`;
-    } else if (i === 1 || i === total || (i >= current - 2 && i <= current + 2)) {
-      pagination.innerHTML += `<button onclick="loadCharacters(${i})">${i}</button>`;
-    } else if (i === current - 3 || i === current + 3) {
+    } else if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+      pagination.innerHTML += `<button onclick="displayCharacters(filteredCharacters, ${i})">${i}</button>`;
+    } else if (i === currentPage - 3 || i === currentPage + 3) {
       pagination.innerHTML += `<span>...</span>`;
     }
   }
-  if (current < total) {
-    pagination.innerHTML += `<button onclick="loadCharacters(${current + 1})">&raquo;</button>`;
+
+  if (currentPage < totalPages) {
+    pagination.innerHTML += `<button onclick="displayCharacters(filteredCharacters, ${currentPage + 1})">&raquo;</button>`;
   }
 }
 
-// Aplicar filtros
-document.getElementById("applyFilters").addEventListener("click", () => {
+// FILTROS
+function aplicarFiltros() {
   const estado = document.getElementById("estado").value;
-  const ocupacion = document.getElementById("ocupacion").value.toLowerCase();
+  const ocupacion = document.getElementById("ocupacion").value.toLowerCase().trim();
   const genero = document.getElementById("genero").value;
 
-  const filtered = allCharacters.filter(p => {
-    const matchEstado = estado ? p.Estado === estado : true;
-    const matchGenero = genero ? p.Genero === genero : true;
-    const matchOcupacion = ocupacion ? p.Ocupacion.toLowerCase().includes(ocupacion) : true;
+  filteredCharacters = allCharacters.filter(character => {
+    const matchEstado = estado === "" || character.Estado === estado;
+    const matchGenero = genero === "" || character.Genero === genero;
+    const matchOcupacion =
+      ocupacion === "" ||
+      (character.Ocupacion && character.Ocupacion.toLowerCase().includes(ocupacion));
+
     return matchEstado && matchGenero && matchOcupacion;
   });
 
-  displayCharacters(filtered);
-  pagination.innerHTML = ""; // quitar paginación en vista filtrada
-});
+  if (filteredCharacters.length === 0) {
+    container.innerHTML = "<p>No se encontraron personajes con esos filtros.</p>";
+    pagination.innerHTML = "";
+  } else {
+    displayCharacters(filteredCharacters, 1);
+  }
+}
 
-// Buscador
-const inputBusqueda = document.getElementById("name-filter");
-const botonBuscar = document.getElementById("buscador");
-const autocompleteList = document.getElementById("autocompleteList");
-
-botonBuscar.addEventListener("click", buscarPersonaje);
-
-inputBusqueda.addEventListener("input", function () {
-  const query = this.value.toLowerCase().trim();
-  mostrarSugerencias(query);
-});
-
-inputBusqueda.addEventListener("click", function () {
-  const query = this.value.toLowerCase().trim();
-  mostrarSugerencias(query);
-});
-
-document.addEventListener("click", function (e) {
-  setTimeout(() => {
-    if (!inputBusqueda.contains(e.target) && !autocompleteList.contains(e.target)) {
-      autocompleteList.innerHTML = "";
-    }
-  }, 100);
-});
-
+// Autocompletado buscador
 function mostrarSugerencias(query) {
   autocompleteList.innerHTML = "";
-
   let sugerencias = [];
+
   if (query.length === 0) {
     sugerencias = [...allCharacters].sort(() => Math.random() - 0.5).slice(0, 3);
   } else {
@@ -152,24 +155,56 @@ function buscarPersonaje() {
   const nombre = inputBusqueda.value.toLowerCase().trim();
   container.innerHTML = "";
   autocompleteList.innerHTML = "";
+  no_res.innerHTML = "";
 
   if (nombre === "") {
+    no_res.innerHTML = "<p>Por favor ingresa un nombre para buscar.</p>";
     pagination.innerHTML = "";
     return;
   }
 
-  const resultados = allCharacters.filter(p =>
-    p.Nombre.toLowerCase().startsWith(nombre)
-  );
+  const resultados = allCharacters
+    .filter(p => p.Nombre.toLowerCase().startsWith(nombre))
+    .sort((a, b) => a.Nombre.localeCompare(b.Nombre));
 
   if (resultados.length === 0) {
-    container.innerHTML = "<p>No se encontró ningún personaje.</p>";
+    no_res.innerHTML = "<p>No se encontró ningún personaje. :(</p>";
     pagination.innerHTML = "";
     return;
   }
 
-  displayCharacters(resultados);
-  pagination.innerHTML = "";
+  filteredCharacters = resultados;
+  displayCharacters(filteredCharacters, 1);
 }
 
-loadCharacters();
+// LISTENERS
+
+// Botón aplicar filtros
+document.getElementById("applyFilters").addEventListener("click", aplicarFiltros);
+
+// Botón toggle filtros
+document.getElementById("filter-toggle").addEventListener("click", () => {
+  const options = document.getElementById("filter-options");
+  options.classList.toggle("hidden");
+});
+
+// Buscador input
+inputBusqueda.addEventListener("input", function () {
+  const query = this.value.toLowerCase().trim();
+  mostrarSugerencias(query);
+});
+
+// Botón buscar
+botonBuscar.addEventListener("click", buscarPersonaje);
+
+// Click fuera de sugerencias
+document.addEventListener("click", function (e) {
+  setTimeout(() => {
+    if (!inputBusqueda.contains(e.target) && !autocompleteList.contains(e.target)) {
+      autocompleteList.innerHTML = "";
+    }
+  }, 100);
+});
+
+// Inicializa app
+loadAllCharacters();
