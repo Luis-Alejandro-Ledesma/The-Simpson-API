@@ -27,6 +27,34 @@
         <img src="Img/The_Simpsons_yellow_logo.svg" alt="logo-hero">
     </div>
     <main>
+        <div class="filter-container">
+  <button id="filter-toggle" class="filter-button">
+    Filtros
+  </button>
+
+  <div id="filter-options" class="filter-options hidden">
+    <label for="estado">Estado:</label>
+    <select id="estado">
+      <option value="">Todos</option>
+      <option value="Vivo">Vivo</option>
+      <option value="Fallecido">Fallecido</option>
+      <option value="Desconocido">Desconocido</option>
+    </select>
+
+    <label for="ocupacion">Ocupación:</label>
+    <input type="text" id="ocupacion" placeholder="Ej. Policía, Estudiante">
+
+    <label for="genero">Género:</label>
+    <select id="genero">
+      <option value="">Todos</option>
+      <option value="Masculino">Masculino</option>
+      <option value="Femenino">Femenino</option>
+      <option value="Desconocido">Desconocido</option>
+    </select>
+
+    <button id="applyFilters">Aplicar filtros</button>
+  </div>
+</div>
         <div id="characters-container"></div>
             <div id="no_res"></div>
         <div id="pagination" class="pagination"></div>
