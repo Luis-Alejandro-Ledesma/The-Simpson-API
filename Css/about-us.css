@@ -1,0 +1,95 @@
+/* Contenedor principal */
+#about-us {
+    max-width: 900px;
+    margin: 0 auto;
+    margin-top: 40px;
+    padding: 40px 20px;
+    font-family: Arial, sans-serif;
+}
+
+/* Títulos principales */
+#about-us h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    color: black;
+}
+
+#about-us h2 {
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 10px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    color: #005BAC;
+    font-size: 28px;
+}
+
+#about-us h3 {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    color: black;
+}
+
+#about-us h4 {
+    margin-top: 20px;
+    color: black;
+}
+
+/* Párrafos */
+#about-us p {
+    margin-bottom: 15px;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Artículos de integrantes */
+#about-us article {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+/* Imagen de equipo */
+#team-photo {
+    text-align: center;
+    margin-top: 50px;
+}
+
+#team-photo img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+#team-photo figcaption {
+    margin-top: 10px;
+    font-style: italic;
+    color: black;
+}
+
+/* Contenedor de la tarjeta con imagen y texto en fila */
+.programmer-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Imagen circular */
+.programmer-card img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Información del programador */
+.programmer-info h4 {
+    margin: 0 0 5px 0;
+    color: #333;
+}
+
+.programmer-info p {
+    margin: 0;
+    color: #555;
+}
