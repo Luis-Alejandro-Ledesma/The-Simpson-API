@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Css/index.css">
+    <link rel="stylesheet" href="Css/docs.css">
+    <title>The Simpson API</title>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html">
+            <img src="Img/The_Simpsons_yellow_logo.svg" alt="The Simpsons Logo" class="logo" />
+        </a>
+        <nav class="nav">
+            <a href="story.html">Story</a>
+            <a href="about-us.html">About us</a>
+            <a href="docs.html">docs</a>
+        </nav>
+    </header>
+      <main>
+        <section class="intro">
+            <h2>🔎 Introducción</h2>
+            <p>La API de Los Simpson permite obtener información de personajes, incluyendo su nombre, género, estado, ocupación, imagen e historia. Es gratuita y pública.</p>
+        </section>
+
+        <section class="endpoint">
+            <h2>📌 Endpoint principal</h2>
+            <code>https://apisimpsons.fly.dev/api/personajes</code>
+            <p>Este endpoint devuelve un listado de personajes.</p>
+
+            <h3>Parámetros opcionales:</h3>
+            <ul>
+                <li><strong>limit</strong>: cantidad de resultados por página (default: 10).</li>
+                <li><strong>page</strong>: número de página (default: 1).</li>
+                <li><strong>nombre</strong>: filtra personajes por nombre exacto.</li>
+            </ul>
+
+            <h3>Ejemplo de solicitud:</h3>
+            <pre>
+GET https://apisimpsons.fly.dev/api/personajes?limit=10&page=1
+            </pre>
+
+            <h3>Respuesta (JSON):</h3>
+            <pre>
+{
+"docs": [
+{
+"_id": "63e32e1fedf49032166cf07b",
+"Nombre": "Krusty el payaso ",
+"Historia": "Herschel Schmoeckel Pinchas Yerucham Krustofsky (apellido que también se escribe Krustofski ) es el cínico, quemado y plagado de adicciones payaso presentador del programa de televisión favorito de Bart y Lisa",
+"Imagen": "https://res.cloudinary.com/dglqojivj/image/upload/v1682559693/simpsons/250px-Krusty_the_Clown_nz1z1o.png",
+"Genero": "Masculino",
+"Estado": "Vivo",
+"Ocupacion": "Personalidad de televisión",
+"updatedAt": "2023-03-13T00:30:55.514Z"
+},
+...
+],
+"totalDocs": 676,
+"limit": 10,
+"totalPages": 68,
+"page": 1,
+"pagingCounter": 1,
+"hasPrevPage": false,
+"hasNextPage": true,
+"prevPage": null,
+"nextPage": 2
+}
+            </pre>
+        </section>
+
+        <section class="example">
+        <h2>💻 Código de ejemplo (fetch JS)</h2>
+            <pre>
+fetch("https://apisimpsons.fly.dev/api/personajes?limit=10&page=1")
+.then(response => response.json())
+.then(data => {
+console.log(data.docs);
+})
+.catch(error => {
+console.error("Error:", error);
+});
+            </pre>
+        </section>
+    </main>
+    <footer class="footer">
+            <div class="copyright">
+                <span>
+                    Created by <strong class="copyright-strong">Ingeniebros (2025) </strong> &#169;
+                </span>
+            </div>
+    </footer>
+</body>
+</html>
