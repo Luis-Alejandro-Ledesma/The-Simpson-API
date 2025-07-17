@@ -9,7 +9,7 @@
 <body>
     <header class="header">
         <a href="index.html">
-            <img src="Img/The_Simpsons_yellow_logo.svg" alt="The Simpsons Logo" class="logo" />
+            <img src="Img/Homer-logo-removebg-preview.png" alt="The Simpsons Logo" class="logo" />
         </a>
         <nav class="nav">
             <a href="story.html">Story</a>
@@ -17,7 +17,7 @@
             <a href="docs.html">docs</a>
         </nav>
         <div class="buscar">
-            <input type="text" id= "name-filter" placeholder="buscar...">
+            <input type="text" id= "name-filter" placeholder="ingresar nombre...">
             <button id="buscador">Buscar</button>
             <ul id="autocompleteList"></ul>
             <div id="resultados"></div>
@@ -27,6 +27,7 @@
         <img src="Img/The_Simpsons_yellow_logo.svg" alt="logo-hero">
     </div>
     <main>
+        
         <div class="filter-container">
   <button id="filter-toggle" class="filter-button">
     Filtros
@@ -55,9 +56,11 @@
     <button id="applyFilters">Aplicar filtros</button>
   </div>
 </div>
+    <div id="loading" class="loading-spinner">Cargando personajes...</div>
+        <div id="pagination-top" class="pagination"></div>
         <div id="characters-container"></div>
             <div id="no_res"></div>
-        <div id="pagination" class="pagination"></div>
+        <div id="pagination-bottom" class="pagination"></div>
     </main>
     <footer class="footer">
             <div class="copyright">
