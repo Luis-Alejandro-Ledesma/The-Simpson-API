@@ -1,9 +1,11 @@
 const container = document.getElementById("characters-container");
-const pagination = document.getElementById("pagination");
+const paginationTop = document.getElementById('pagination-top');
+const paginationBottom = document.getElementById('pagination-bottom');
 const no_res = document.getElementById("no_res");
 const inputBusqueda = document.getElementById("name-filter");
 const botonBuscar = document.getElementById("buscador");
 const autocompleteList = document.getElementById("autocompleteList");
+const loading = document.getElementById("loading");
 
 let currentPage = 1;
 const limit = 50;
@@ -27,6 +29,9 @@ function verDetalles(nombre) {
 }
 
 async function loadAllCharacters() {
+  loading.style.display = "block"; 
+  container.innerHTML = "";
+
   let page = 1;
   let hasMore = true;
   allCharacters = [];
@@ -43,9 +48,10 @@ async function loadAllCharacters() {
       page++;
     }
   }
-
+allCharacters.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
   filteredCharacters = allCharacters;
   displayCharacters(filteredCharacters, 1);
+  loading.style.display = "none"; 
 }
 
 function displayCharacters(array, page) {
@@ -64,29 +70,35 @@ function displayCharacters(array, page) {
 }
 
 function renderPagination(totalItems) {
-  const totalPages = Math.ceil(totalItems / limit);
-  pagination.innerHTML = "";
+    const totalPages = Math.ceil(totalItems / limit);
 
-  if (totalPages <= 1) return;
+    paginationTop.innerHTML = "";
+    paginationBottom.innerHTML = "";
 
-  if (currentPage > 1) {
-    pagination.innerHTML += `<button onclick="displayCharacters(filteredCharacters, ${currentPage - 1})">&laquo;</button>`;
-  }
+    if (totalPages <= 1) return;
+    let paginationHTML = "";
 
-  for (let i = 1; i <= totalPages; i++) {
-    if (i === currentPage) {
-      pagination.innerHTML += `<button class="active">${i}</button>`;
-    } else if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
-      pagination.innerHTML += `<button onclick="displayCharacters(filteredCharacters, ${i})">${i}</button>`;
-    } else if (i === currentPage - 3 || i === currentPage + 3) {
-      pagination.innerHTML += `<span>...</span>`;
+    if (currentPage > 1) {
+        paginationHTML += `<button onclick="displayCharacters(filteredCharacters, ${currentPage - 1})">&laquo;</button>`;
     }
-  }
 
-  if (currentPage < totalPages) {
-    pagination.innerHTML += `<button onclick="displayCharacters(filteredCharacters, ${currentPage + 1})">&raquo;</button>`;
-  }
+    for (let i = 1; i <= totalPages; i++) {
+        if (i === currentPage) {
+            paginationHTML += `<button class="active">${i}</button>`;
+        } else if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+            paginationHTML += `<button onclick="displayCharacters(filteredCharacters, ${i})">${i}</button>`;
+        } else if (i === currentPage - 3 || i === currentPage + 3) {
+            paginationHTML += `<span>...</span>`;
+        }
+    }
+
+    if (currentPage < totalPages) {
+        paginationHTML += `<button onclick="displayCharacters(filteredCharacters, ${currentPage + 1})">&raquo;</button>`;
+    }
+    paginationTop.innerHTML = paginationHTML;
+    paginationBottom.innerHTML = paginationHTML;
 }
+
 
 function aplicarFiltros() {
   const estado = document.getElementById("estado").value;
@@ -104,11 +116,14 @@ function aplicarFiltros() {
   });
 
   if (filteredCharacters.length === 0) {
-    container.innerHTML = "<p>No se encontraron personajes con esos filtros.</p>";
-    pagination.innerHTML = "";
+    container.innerHTML = "";
+    no_res.innerHTML = "<p>No se encontraron personajes con esos filtros.</p>";
+    paginationTop.innerHTML = "";
+    paginationBottom.innerHTML = "";
   } else {
     displayCharacters(filteredCharacters, 1);
   }
+  return;
 }
 
 function mostrarSugerencias(query) {
@@ -136,13 +151,14 @@ function mostrarSugerencias(query) {
     const li = document.createElement("li");
     li.textContent = p.Nombre;
     li.addEventListener("click", () => {
-      inputBusqueda.value = p.Nombre;
-      autocompleteList.innerHTML = "";
-      buscarPersonaje();
-    });
+  inputBusqueda.value = p.Nombre;
+  autocompleteList.innerHTML = "";
+});
+botonBuscar.addEventListener("click", buscarPersonaje);
     autocompleteList.appendChild(li);
   });
 }
+no_res.innerHTML = "";
 
 function buscarPersonaje() {
   const nombre = inputBusqueda.value.toLowerCase().trim();
@@ -152,7 +168,8 @@ function buscarPersonaje() {
 
   if (nombre === "") {
     no_res.innerHTML = "<p>Por favor ingresa un nombre para buscar.</p>";
-    pagination.innerHTML = "";
+    paginationTop.innerHTML = "";
+    paginationBottom.innerHTML = "";
     return;
   }
 
@@ -162,7 +179,8 @@ function buscarPersonaje() {
 
   if (resultados.length === 0) {
     no_res.innerHTML = "<p>No se encontró ningún personaje. :(</p>";
-    pagination.innerHTML = "";
+    paginationTop.innerHTML = "";
+    paginationBottom.innerHTML = "";
     return;
   }
 
@@ -182,14 +200,22 @@ inputBusqueda.addEventListener("input", function () {
   mostrarSugerencias(query);
 });
 
-botonBuscar.addEventListener("click", buscarPersonaje);
-
-document.addEventListener("click", function (e) {
-  setTimeout(() => {
-    if (!inputBusqueda.contains(e.target) && !autocompleteList.contains(e.target)) {
-      autocompleteList.innerHTML = "";
-    }
-  }, 100);
+inputBusqueda.addEventListener("mousedown", function () {
+  const query = this.value.toLowerCase().trim();
+  mostrarSugerencias(query);
 });
 
+document.addEventListener("mousedown", function (e) {
+  if (!inputBusqueda.contains(e.target) && !autocompleteList.contains(e.target)) {
+    autocompleteList.innerHTML = "";
+  }
+});
+
+
 loadAllCharacters();
+window.addEventListener("pageshow", function (event) {
+  const navType = performance.getEntriesByType("navigation")[0]?.type;
+  if (event.persisted || navType === "back_forward") {
+    window.location.reload(); 
+  }
+});
