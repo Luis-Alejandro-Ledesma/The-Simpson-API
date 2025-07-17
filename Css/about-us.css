@@ -1,4 +1,3 @@
-/* Contenedor principal */
 #about-us {
     max-width: 900px;
     margin: 0 auto;
@@ -7,7 +6,6 @@
     font-family: Arial, sans-serif;
 }
 
-/* Títulos principales */
 #about-us h1 {
     text-align: center;
     margin-bottom: 30px;
@@ -35,14 +33,12 @@
     color: black;
 }
 
-/* Párrafos */
 #about-us p {
     margin-bottom: 15px;
     color: #333;
     line-height: 1.6;
 }
 
-/* Artículos de integrantes */
 #about-us article {
     background: #f9f9f9;
     padding: 15px;
@@ -50,7 +46,6 @@
     margin-bottom: 15px;
 }
 
-/* Imagen de equipo */
 #team-photo {
     text-align: center;
     margin-top: 50px;
@@ -68,14 +63,12 @@
     color: black;
 }
 
-/* Contenedor de la tarjeta con imagen y texto en fila */
 .programmer-card {
     display: flex;
     align-items: center;
     gap: 15px;
 }
 
-/* Imagen circular */
 .programmer-card img {
     width: 80px;
     height: 80px;
@@ -83,7 +76,6 @@
     object-fit: cover;
 }
 
-/* Información del programador */
 .programmer-info h4 {
     margin: 0 0 5px 0;
     color: #333;
