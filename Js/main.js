@@ -15,7 +15,8 @@ let filteredCharacters = [];
 function renderCharacterCard(character) {
   return `
     <div class="character-card" onclick="verDetalles('${character.Nombre}')">
-      <img src="${character.Imagen}" alt="${character.Nombre}" class="character-img">
+      <img src="${character.Imagen}" alt="${character.Nombre}" class="character-img"  
+      onerror="this.onerror=null; this.src='Img/klipartz.com.png';">
       <h2 class="character-name">${character.Nombre}</h2>
       <p class="character-gender">${character.Genero || "Genero no disponible"}</p>
       <p class="character-status">${character.Estado || "Estado no disponible"}</p>
