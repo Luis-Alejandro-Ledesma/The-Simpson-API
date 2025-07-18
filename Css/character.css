@@ -166,3 +166,316 @@ main {
   display: none;
   text-align: center;
 }
+
+@media (max-width: 667px) {
+  .header {
+    gap: 20px;
+  }
+  .nav {
+    gap: 15px;
+    font-size: 16px;
+  }
+  .character-card {
+    flex-direction: column;
+    padding: 20px;
+    gap: 20px;
+  }
+  .character-img {
+    max-width: 100%;
+    max-height: 200px;
+  }
+  .character-name,
+  .character-gender,
+  .character-status,
+  .character-occupation {
+    font-size: 16px;
+  }
+  .character-history {
+    font-size: 14px;
+  }
+}
+
+/* <= 896px */
+@media (max-width: 896px) and (min-width: 668px) {
+  .header {
+    gap: 80px;
+  }
+  .nav {
+    gap: 30px;
+  }
+  .character-card {
+    flex-direction: row;
+    gap: 20px;
+  }
+  .character-img {
+    max-height: 250px;
+  }
+  .character-name,
+  .character-gender,
+  .character-status,
+  .character-occupation {
+    font-size: 18px;
+  }
+  .character-history {
+    font-size: 16px;
+  }
+}
+
+/* <= 844px */
+@media (max-width: 844px) and (min-width: 668px) {
+  .header {
+    gap: 50px;
+  }
+  .nav {
+    gap: 25px;
+  }
+  .character-card {
+    flex-direction: column;
+  }
+  .character-name,
+  .character-gender,
+  .character-status,
+  .character-occupation {
+    font-size: 16px;
+  }
+  .character-history {
+    font-size: 14px;
+  }
+}
+
+/* <= 932px */
+@media (max-width: 932px) and (min-width: 845px) {
+  .header {
+    gap: 100px;
+  }
+  .character-card {
+    flex-direction: column;
+  }
+  .character-name,
+  .character-gender,
+  .character-status,
+  .character-occupation {
+    font-size: 17px;
+  }
+  .character-history {
+    font-size: 15px;
+  }
+}
+
+/* <= 915px */
+@media (max-width: 915px) and (min-width: 845px) {
+  .header {
+    gap: 80px;
+  }
+  .character-card {
+    flex-direction: column;
+  }
+  .character-name,
+  .character-gender,
+  .character-status,
+  .character-occupation {
+    font-size: 17px;
+  }
+  .character-history {
+    font-size: 15px;
+  }
+}
+
+/* <= 740px */
+@media (max-width: 740px) and (min-width: 668px) {
+  .header {
+    gap: 30px;
+  }
+  .nav {
+    gap: 15px;
+  }
+  .character-card {
+    flex-direction: column;
+  }
+  .character-name,
+  .character-gender,
+  .character-status,
+  .character-occupation {
+    font-size: 15px;
+  }
+  .character-history {
+    font-size: 13px;
+  }
+}
+
+/* <= 915px (segunda vez) */
+@media (max-width: 915px) and (min-width: 845px) {
+  .header {
+    gap: 90px;
+  }
+  .character-card {
+    flex-direction: row;
+  }
+  .character-name,
+  .character-gender,
+  .character-status,
+  .character-occupation {
+    font-size: 17px;
+  }
+  .character-history {
+    font-size: 15px;
+  }
+}
+
+/* <= 1024px */
+@media (max-width: 1024px) and (min-width: 933px) {
+  .header {
+    gap: 120px;
+  }
+  .nav {
+    gap: 50px;
+  }
+  .character-card {
+    flex-direction: row;
+  }
+  .character-name,
+  .character-gender,
+  .character-status,
+  .character-occupation {
+    font-size: 18px;
+  }
+  .character-history {
+    font-size: 16px;
+  }
+}
+
+/* <= 1180px */
+@media (max-width: 1180px) and (min-width: 1025px) {
+  .header {
+    gap: 150px;
+  }
+  .character-card {
+    flex-direction: row;
+  }
+  .character-name,
+  .character-gender,
+  .character-status,
+  .character-occupation {
+    font-size: 19px;
+  }
+  .character-history {
+    font-size: 17px;
+  }
+}
+
+/* <= 1366px */
+@media (max-width: 1366px) and (min-width: 1181px) {
+  .header {
+    gap: 200px;
+  }
+  .character-card {
+    flex-direction: row;
+  }
+  .character-name,
+  .character-gender,
+  .character-status,
+  .character-occupation {
+    font-size: 20px;
+  }
+  .character-history {
+    font-size: 18px;
+  }
+}
+
+/* <= 1368px */
+@media (max-width: 1368px) and (min-width: 1367px) {
+  .header {
+    gap: 220px;
+  }
+  .character-card {
+    flex-direction: row;
+  }
+  .character-name,
+  .character-gender,
+  .character-status,
+  .character-occupation {
+    font-size: 20px;
+  }
+  .character-history {
+    font-size: 18px;
+  }
+}
+
+/* <= 720px */
+@media (max-width: 720px) and (min-width: 668px) {
+  .header {
+    gap: 20px;
+  }
+  .nav {
+    gap: 10px;
+  }
+  .character-card {
+    flex-direction: column;
+  }
+  .character-name,
+  .character-gender,
+  .character-status,
+  .character-occupation {
+    font-size: 15px;
+  }
+  .character-history {
+    font-size: 13px;
+  }
+}
+
+/* <= 882px */
+@media (max-width: 882px) and (min-width: 845px) {
+  .header {
+    gap: 70px;
+  }
+  .character-card {
+    flex-direction: column;
+  }
+  .character-name,
+  .character-gender,
+  .character-status,
+  .character-occupation {
+    font-size: 17px;
+  }
+  .character-history {
+    font-size: 15px;
+  }
+}
+
+/* <= 1280px */
+@media (max-width: 1280px) and (min-width: 1181px) {
+  .header {
+    gap: 180px;
+  }
+  .character-card {
+    flex-direction: row;
+  }
+  .character-name,
+  .character-gender,
+  .character-status,
+  .character-occupation {
+    font-size: 19px;
+  }
+  .character-history {
+    font-size: 17px;
+  }
+}
+
+/* <= 914px */
+@media (max-width: 914px) and (min-width: 845px) {
+  .header {
+    gap: 75px;
+  }
+  .character-card {
+    flex-direction: column;
+  }
+  .character-name,
+  .character-gender,
+  .character-status,
+  .character-occupation {
+    font-size: 17px;
+  }
+  .character-history {
+    font-size: 15px;
+  }
+}
