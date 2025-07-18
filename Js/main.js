@@ -36,18 +36,17 @@ async function loadAllCharacters() {
   let hasMore = true;
   allCharacters = [];
 
-  while (hasMore) {
-    const API_URL = `https://apisimpsons.fly.dev/api/personajes?limit=50&page=${page}`;
+    const API_URL = `https://apisimpsons.fly.dev/api/personajes?limit=676`;
     const res = await fetch(API_URL);
     const data = await res.json();
     allCharacters = allCharacters.concat(data.docs);
-
+console.log(allCharacters);
     if (data.docs.length < 50) {
       hasMore = false;
     } else {
       page++;
     }
-  }
+  
 allCharacters.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
   filteredCharacters = allCharacters;
   displayCharacters(filteredCharacters, 1);
